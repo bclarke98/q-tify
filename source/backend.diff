@@ -1,0 +1,63 @@
+diff --git a/app/manager.py b/app/manager.py
+index c439733..f94c233 100644
+--- a/app/manager.py
++++ b/app/manager.py
+@@ -30,6 +30,12 @@ def block_song(user, args):
+     remove_song(user, args['song'])
+     return True, f'Song {args["song"]} added to user {user.spotifyid}\'s blocklist'
+ 
++def unblock_song(user, args):
++    query_db('delete from blocked where roomid=? and songuri=?',
++        [user.id, args['song']],
++        commit=True)
++    return True, f'Song {args["song"]} removed from user {user.spotifyid}\'s blocklist'
++
+ def dump_user(user, args):
+     return user.dict
+ 
+@@ -40,6 +46,19 @@ def disable_req(user, args):
+ def get_requests(user, args):
+     return True, [str(i) for i in user.get_requests()]
+ 
++def get_top_tracks(user, args):
++    r_top = api_call(user.accesstoken, 'me/top/tracks')
++    try:
++        j = r_top.json()
++        for song in j['items']:
++            print(song)
++        return True, []
++    except (KeyError, ValueError):
++        return False, []
++
++def get_blocked_tracks(user, args):
++    return True, [str(i) for i in user.get_blocked()]
++
+ def enable_req(user, args):
+     user.allow_requests()
+     return True, f'Requests enabled for user {user.spotifyid}'
+@@ -48,4 +67,3 @@ def remove_song(user, uri):
+     query_db('delete from requests where roomid=? and songuri=?',
+         [user.id, uri],
+         commit=True)
+-
+diff --git a/app/utils.py b/app/utils.py
+index a086341..a808b04 100644
+--- a/app/utils.py
++++ b/app/utils.py
+@@ -222,8 +222,14 @@ class DBUser(object):
+ 
+     def get_requests(self):
+         return [Song.from_json(i) for i in query_db(
+-            'select * from requests where roomid in (select id from users where spotifyid = ? and refreshtoken = ?)',
+-            [self.spotifyid, self.refreshtoken],
++            'select * from requests where roomid=?',
++            [self.id],
++        )]
++
++    def get_blocked(self):
++        return [Song.from_json(i) for i in query_db(
++            'select * from blocked where roomid=?',
++            [self.id]
+         )]
+ 
+     def __str__(self):
