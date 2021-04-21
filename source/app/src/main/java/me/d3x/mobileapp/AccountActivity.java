@@ -1,6 +1,7 @@
 package me.d3x.mobileapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class AccountActivity extends AppCompatActivity {
         Qtify.getInstance().setActivity(this);
         tabLayout = (TabLayout)findViewById(R.id.tab_layout);
         viewPager = (ViewPager2)findViewById(R.id.accountPager);
+        Qtify.getInstance().setPager(viewPager);
         final TextView greet = findViewById(R.id.greetText);
         greet.setText("Hi, " + Qtify.getInstance().getUser().getUsername());
 
@@ -37,6 +39,7 @@ public class AccountActivity extends AppCompatActivity {
         });
         final ImageButton helpBtn = findViewById(R.id.helpBtn);
         helpBtn.setOnClickListener((v)->{
+            //Qutils.alertDialog("AlertPagerStatus", "Position" + Qtify.getInstance().getPager().getCurrentItem());
             //show help view
         });
         final Button logoutBtn = findViewById(R.id.logoutBtn);
@@ -50,6 +53,20 @@ public class AccountActivity extends AppCompatActivity {
             }
         );
         viewPager.setAdapter(new TabViewAdapter());
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                switch(position){
+                    case 0:
+                        Qtify.getInstance().setListSource(Qutils.ListSource.USER_SONGS);
+                        break;
+                    case 1:
+                        Qtify.getInstance().setListSource(Qutils.ListSource.USER_BLOCKED);
+                        break;
+                }
+            }
+        });
         mediator.attach();
     }
 

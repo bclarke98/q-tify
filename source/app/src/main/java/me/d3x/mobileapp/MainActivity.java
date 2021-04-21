@@ -25,13 +25,17 @@ import me.d3x.mobileapp.util.Qutils;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AuthenticationRequest.Builder builder;
+    private AuthenticationRequest.Builder builder = null;
 
     private void launchLogin(){
         Qtify.getInstance().retrieveStoredUser();
         if(Qtify.getInstance().getUser() == null) {
-            AuthenticationRequest request = builder.build();
-            AuthenticationClient.openLoginActivity(this, 1337, request);
+            try {
+                AuthenticationRequest request = builder.build();
+                AuthenticationClient.openLoginActivity(this, 1337, request);
+            }catch(NullPointerException e){
+                Qutils.alertDialog("Q-TifyHandshakeError", "Unable to initialize Spotify SDK AuthenticationRequest Builder. Submit a bug report to 'bugs@d3x.me'");
+            }
         }else{
             launchRoom();
         }

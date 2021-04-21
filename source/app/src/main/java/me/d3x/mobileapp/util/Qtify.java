@@ -2,6 +2,7 @@ package me.d3x.mobileapp.util;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.RequestQueue;
 
@@ -34,6 +35,7 @@ public class Qtify {
     private RequestQueue reqQueue;
     private List<QSong> cachedSongs;
     private SongViewAdapter adapter;
+    private ViewPager2 pager;
     private boolean verbose = false;
     private AppCompatActivity activity;
     private Qutils.ListSource listSource = Qutils.ListSource.NO_DATA;
@@ -164,6 +166,14 @@ public class Qtify {
 
     public void setAdapter(SongViewAdapter adapter) {
         this.adapter = adapter;
+    }
+
+    public void setPager(ViewPager2 pager){
+        this.pager = pager;
+    }
+
+    public ViewPager2 getPager(){
+        return this.pager;
     }
 
     public void refreshLock(int durationMS, Runnable task){

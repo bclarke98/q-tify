@@ -102,7 +102,7 @@ public class QUser {
 
     public void lockRoom(Consumer<Boolean> callback){
         Qutils.sendRequest(
-                Qutils.getRequest("https://q.d5x.me/api/disable_req",
+                Qutils.getRequest("https://q.d3x.me/api/disable_req",
                         (s) -> {
                             try{
                                 JSONObject j = new JSONObject(s);
@@ -119,7 +119,7 @@ public class QUser {
 
     public void unlockRoom(Consumer<Boolean> callback){
         Qutils.sendRequest(
-                Qutils.getRequest("https://q.d5x.me/api/enable_req",
+                Qutils.getRequest("https://q.d3x.me/api/enable_req",
                         (s) -> {
                             try{
                                 JSONObject j = new JSONObject(s);
@@ -136,7 +136,7 @@ public class QUser {
 
     public void blockSong(QSong song, Consumer<Boolean> callback){
         Qutils.sendRequest(
-                Qutils.getRequest("https://q.d5x.me/api/block_song?song=" + song.getUri(),
+                Qutils.getRequest("https://q.d3x.me/api/block_song?song=" + song.getUri(),
                         (s) -> {
                             try{
                                 JSONObject j = new JSONObject(s);
@@ -153,7 +153,7 @@ public class QUser {
 
     public void unblockSong(QSong song, Consumer<Boolean> callback){
         Qutils.sendRequest(
-                Qutils.getRequest("https://q.d5x.me/api/unblock_song?song=" + song.getUri(),
+                Qutils.getRequest("https://q.d3x.me/api/unblock_song?song=" + song.getUri(),
                         (s) -> {
                             try{
                                 JSONObject j = new JSONObject(s);
@@ -170,7 +170,7 @@ public class QUser {
 
     public void approveSong(QSong song, Consumer<Boolean> callback){
         Qutils.sendRequest(
-            Qutils.getRequest("https://q.d5x.me/api/approve_song?song=" + song.getUri(),
+            Qutils.getRequest("https://q.d3x.me/api/approve_song?song=" + song.getUri(),
                 (s) -> {
                     try{
                         JSONObject j = new JSONObject(s);

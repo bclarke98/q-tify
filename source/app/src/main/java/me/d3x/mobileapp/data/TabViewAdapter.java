@@ -32,9 +32,6 @@ public class TabViewAdapter extends RecyclerView.Adapter<TabViewAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //TODO: swapping tabs occasionally reduces list length to shorter list (request cache vs blocklist)
-        //race condition?
-        Log.e("TabViewAdapter onBindViewHolder", "Position: " + position);
         switch(position){
             case 0:
                 Qtify.getInstance().getUser().getSongRequests((l)->{
