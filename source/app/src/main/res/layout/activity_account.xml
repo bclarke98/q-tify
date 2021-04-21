@@ -15,7 +15,7 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/helpBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,17 +51,17 @@
 
     <ImageButton
         android:id="@+id/helpBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/infoBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_help" />
+        app:srcCompat="@android:drawable/ic_menu_search" />
 
     <ImageButton
         android:id="@+id/infoBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="56dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/helpBtn"
         app:layout_constraintEnd_toStartOf="@+id/helpBtn"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_info_details" />

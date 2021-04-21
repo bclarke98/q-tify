@@ -1,5 +1,6 @@
 package me.d3x.mobileapp;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -37,10 +39,14 @@ public class AccountActivity extends AppCompatActivity {
         infoBtn.setOnClickListener((v)->{
             Qutils.alertDialog("AlertAccountInfo", "Room number: " + Qtify.getInstance().getUser().getId());
         });
-        final ImageButton helpBtn = findViewById(R.id.helpBtn);
-        helpBtn.setOnClickListener((v)->{
-            //Qutils.alertDialog("AlertPagerStatus", "Position" + Qtify.getInstance().getPager().getCurrentItem());
-            //show help view
+        final ImageButton lockToggleBtn = findViewById(R.id.helpBtn);
+        Qtify.getInstance().getUser().syncUserState((r)->{ //set initial state of image icon based on user's "enabled" status
+            lockToggleBtn.setImageResource(Qtify.getInstance().getUser().getEnabled() == 0 ? android.R.drawable.ic_lock_idle_lock : android.R.drawable.ic_menu_search);
+        });
+        lockToggleBtn.setOnClickListener((v)->{
+            Qtify.getInstance().getUser().toggleRoomLock((r)->{
+                lockToggleBtn.setImageResource(Qtify.getInstance().getUser().getEnabled() == 0 ? android.R.drawable.ic_lock_idle_lock : android.R.drawable.ic_menu_search);
+            });
         });
         final Button logoutBtn = findViewById(R.id.logoutBtn);
         logoutBtn.setOnClickListener((v)->{

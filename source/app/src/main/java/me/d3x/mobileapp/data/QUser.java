@@ -1,6 +1,7 @@
 package me.d3x.mobileapp.data;
 
 import android.util.Base64;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +23,7 @@ public class QUser {
     private List<QSong> requests;
     private List<QSong> blocklist;
     private int id;
+    private int enabled;
 
     public QUser(String spotifyid, String refreshtoken, String accesstoken, int id){
         this.spotifyid = spotifyid;
@@ -78,6 +80,10 @@ public class QUser {
         return this.spotifyid;
     }
 
+    public int getEnabled() {
+        return this.enabled;
+    }
+
     public synchronized List<QSong> getCachedRequests(){
         return this.requests;
     }
@@ -98,7 +104,31 @@ public class QUser {
         return q;
     }
 
+    public void syncUserState(Consumer<Boolean> callback){
+        Qutils.sendRequest(
+                Qutils.getRequest("https://q.d3x.me/api/dump_user",
+                        (s) -> {
+                            try{
+                                JSONObject j = new JSONObject(s);
+                                Qutils.ApiResponse rApi = new Qutils.ApiResponse(j);
+                                JSONObject s_user = new JSONObject((rApi.getMsg()));
+                                this.enabled = s_user.getInt("enabled");
+                                if(callback != null)
+                                    callback.accept(rApi.getResult());
+                            }catch(JSONException e){e.printStackTrace();}
+                        },
+                        this.authHeaders()
+                )
+        );
+    }
 //----------------------------------------------------------------------------------------------------------
+
+    public void toggleRoomLock(Consumer<Boolean> callback){
+        if(this.enabled == 0)
+            this.unlockRoom(callback);
+        else
+            this.lockRoom(callback);
+    }
 
     public void lockRoom(Consumer<Boolean> callback){
         Qutils.sendRequest(
@@ -107,6 +137,8 @@ public class QUser {
                             try{
                                 JSONObject j = new JSONObject(s);
                                 Qutils.ApiResponse rApi = new Qutils.ApiResponse(j);
+                                if(rApi.getResult())
+                                    this.enabled = 0;
                                 rApi.toLog("UserRoomLocked");
                                 if(callback != null)
                                     callback.accept(rApi.getResult());
@@ -124,6 +156,8 @@ public class QUser {
                             try{
                                 JSONObject j = new JSONObject(s);
                                 Qutils.ApiResponse rApi = new Qutils.ApiResponse(j);
+                                if(rApi.getResult())
+                                    this.enabled = 1;
                                 rApi.toLog("UserRoomUnlocked");
                                 if(callback != null)
                                     callback.accept(rApi.getResult());

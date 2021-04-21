@@ -182,8 +182,11 @@ public class Qutils {
     }
 
     public static void initHandshake(String uid, Runnable callback){
-        if(Qtify.getInstance().getAPICreds().length() > 0)
+        if(Qtify.getInstance().getAPICreds().length() > 0) {
+            if (callback != null)
+                callback.run();
             return;
+        }
         sendRequest(getRequest("https://q.d3x.me/handshake/" + uid,
             (s)->{
                 try{
